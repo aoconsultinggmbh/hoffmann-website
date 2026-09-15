@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+Disallow: /kontakt/senden.php
+
+User-agent: GPTBot
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://gyn-rangsdorf.de/sitemap.xml
