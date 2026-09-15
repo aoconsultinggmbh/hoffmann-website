@@ -1,11 +1,22 @@
 # Frauenarztpraxis Dr. Janine Hoffmann, Rangsdorf
 
 Webseite der Frauenarztpraxis Dr. Janine Hoffmann, Am Stadtweg 48, 15834 Rangsdorf.
-25 Seiten: Frauenheilkunde, Geburtshilfe, Ästhetik, Emsella, Praxis, Karriere,
+24 Seiten plus 404-Seite: Frauenheilkunde, Geburtshilfe, Ästhetik, Emsella, Praxis, Karriere,
 Kontakt, häufige Fragen, Gleichstellung, Impressum, Datenschutz.
 Domain: **gyn-rangsdorf.de**
 
 Erstellt von AO Consulting GmbH.
+
+## Wichtig: wo geändert wird
+
+Die Seite wird **nicht** in `website/` bearbeitet. Der Quellcode liegt auf Admirs Mac
+unter `~/Desktop/Admir Assistenz/Webseite_Dr_Hoffmann/01_site/`:
+
+- Texte: `pages/*.html` (ein File je Seite, mit JSON-Kopf)
+- Praxisdaten, Navigation, Öffnungszeiten: `data/site.json`
+- danach `python3 build.py` ausführen und den Inhalt von `dist/` nach `website/` kopieren
+
+Wer direkt in `website/` ändert, verliert die Änderung beim nächsten Bauen.
 
 ## Aufbau
 
