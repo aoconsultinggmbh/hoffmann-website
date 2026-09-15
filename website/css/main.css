@@ -172,7 +172,11 @@ hr{border:0;border-top:1px solid var(--line);margin:var(--space-5) 0}
   .nav-link{width:100%;justify-content:space-between;padding:1.05rem .25rem;font-size:var(--step-1);border-radius:0;white-space:normal}
   .nav-link:hover,.nav-item.is-active>.nav-link{background:none;box-shadow:none}
   .sub{position:static;transform:none;min-width:0;border:0;box-shadow:none;border-radius:0;opacity:1;visibility:visible;pointer-events:auto;display:none;background:var(--accent-50);margin:0 calc(-1*var(--gutter)) .5rem;padding:.5rem var(--gutter)}
-  .nav-item.is-open>.sub{display:block}
+  /* Die Desktop-Regel .nav-item.is-open>.sub setzt transform:translateX(-50%)
+     (mittige Klappliste). Sie ist staerker als .sub{transform:none} darueber,
+     deshalb rutschte das Untermenue auf dem Handy nach links aus dem Bild.
+     Hier wird sie mit gleicher Staerke zurueckgesetzt. */
+  .nav-item.is-open>.sub{display:block;transform:none}
   .sub-inner{grid-template-columns:1fr}
   .sub-lead{border-right:0;border-bottom:1px solid var(--line);background:none;padding:.9rem .25rem}
   .sub-list{grid-template-columns:1fr;padding:.35rem 0}
