@@ -111,7 +111,12 @@ hr{border:0;border-top:1px solid var(--line);margin:var(--space-5) 0}
 .link-more:hover .ic{transform:translateX(4px)}
 
 /* Header */
-.site-header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.92);backdrop-filter:saturate(1.4) blur(12px);-webkit-backdrop-filter:saturate(1.4) blur(12px);border-bottom:1px solid transparent;transition:border-color var(--dur),box-shadow var(--dur)}
+/* Der Weichzeichner liegt bewusst NICHT auf .site-header selbst: backdrop-filter
+   macht ein Element zum Bezugsrahmen fuer alles, was darin position:fixed ist.
+   Das mobile Menue war dadurch nur so hoch wie der Header. Der Effekt sitzt jetzt
+   auf einer Hintergrundflaeche im Header, der Header selbst bleibt filterfrei. */
+.site-header{position:sticky;top:0;z-index:100;background:transparent;border-bottom:1px solid transparent;transition:border-color var(--dur),box-shadow var(--dur)}
+.site-header::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:rgba(255,255,255,.92);backdrop-filter:saturate(1.4) blur(12px);-webkit-backdrop-filter:saturate(1.4) blur(12px)}
 .site-header.is-scrolled{border-bottom-color:var(--line);box-shadow:0 8px 30px -18px rgba(23,59,54,.25)}
 .header-bar{display:flex;align-items:center;justify-content:space-between;gap:1.5rem;min-height:5rem}
 .brand{display:inline-flex;align-items:center;flex:none}
@@ -157,14 +162,11 @@ hr{border:0;border-top:1px solid var(--line);margin:var(--space-5) 0}
   .burger{display:inline-flex}
   .header-actions .btn{display:none}
   .header-phone{display:none}
-  .nav{position:fixed;inset:4.5rem 0 0 0;background:#fff;overflow:auto;padding:1rem var(--gutter) 6rem;transform:translateX(100%);transition:transform .35s var(--ease);z-index:90;border-top:1px solid var(--line)}
+  .nav{position:fixed;inset:4.5rem 0 0 0;height:auto;min-height:calc(100dvh - 4.5rem);background:#fff;overflow:auto;padding:1rem var(--gutter) 6rem;transform:translateX(100%);transition:transform .35s var(--ease);z-index:95;border-top:1px solid var(--line);-webkit-overflow-scrolling:touch}
   body.nav-open .nav{transform:none}
   body.nav-open{overflow:hidden}
-  /* Wichtig: backdrop-filter auf .site-header macht den Header zum Bezugsrahmen
-     fuer position:fixed. Das Menue war dadurch nur so hoch wie der Header, und
-     der Seiteninhalt lag darueber. Solange das Menue offen ist, faellt der
-     Effekt weg, damit .nav sich wieder am Fenster ausrichtet. */
-  body.nav-open .site-header{backdrop-filter:none;-webkit-backdrop-filter:none;background:#fff}
+  /* Menue offen: Header ganz weiss, damit nichts durchscheint. */
+  body.nav-open .site-header::before{backdrop-filter:none;-webkit-backdrop-filter:none;background:#fff}
   .nav-list{flex-direction:column;align-items:stretch;gap:0}
   .nav-item{border-bottom:1px solid var(--line)}
   .nav-link{width:100%;justify-content:space-between;padding:1.05rem .25rem;font-size:var(--step-1);border-radius:0;white-space:normal}
