@@ -55,3 +55,11 @@ ErrorDocument 404 /404.html
   AddType video/mp4 .mp4
   AddType text/vtt .vtt
 </IfModule>
+
+<IfModule mod_headers.c>
+  # HTML nie zwischenspeichern: sonst sehen Besucher (und wir beim
+  # Testen) nach einer Aenderung stundenlang die alte Seite.
+  <FilesMatch "\.(html|php)$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+</IfModule>
