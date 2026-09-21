@@ -5,6 +5,16 @@ ErrorDocument 404 /404.html
 
 <IfModule mod_rewrite.c>
   RewriteEngine On
+
+  # --- Uebergangsadresse des Hosters nicht umleiten -------------------------
+  # Vor dem Domain-Umzug ist die Seite nur unter der Adresse
+  # <domain>.<konto>.kasserver.com erreichbar. Ohne diese Ausnahme wuerde die
+  # Umleitung darunter jeden Aufruf sofort wieder auf die ALTE Seite schicken,
+  # und der Test vor dem Livegang waere unmoeglich.
+  # Die Regel bleibt auch nach dem Livegang stehen: sie stoert nicht und
+  # rettet den naechsten Test.
+  RewriteCond %{HTTP_HOST} \.kasserver\.com$ [NC]
+  RewriteRule ^ - [L]
   # HTTPS erzwingen und www auf die Hauptdomain leiten
   RewriteCond %{HTTPS} off [OR]
   RewriteCond %{HTTP_HOST} ^www\. [NC]
