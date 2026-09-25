@@ -428,7 +428,18 @@ hr{border:0;border-top:1px solid var(--line);margin:var(--space-5) 0}
 .page-head-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(2rem,5vw,4rem);align-items:center}
 @media (max-width:900px){.page-head-grid{grid-template-columns:1fr}}
 .subnav{position:sticky;top:5rem;z-index:40;background:rgba(255,255,255,.95);backdrop-filter:blur(8px);border-block:1px solid var(--line)}
-.subnav ul{list-style:none;margin:0;padding:0;display:flex;gap:.25rem;overflow-x:auto;scrollbar-width:none}
+/* Die Punkte passen auf dem Handy nicht nebeneinander. Damit niemand raten muss,
+   ob seitlich noch etwas kommt, liegt an jeder Seite ein weicher Verlauf; rechts
+   zusaetzlich ein Pfeil. Beides erscheint nur, wenn dort wirklich mehr steht
+   (main.js setzt data-mehr-links / data-mehr-rechts). */
+.subnav{position:sticky;overflow:hidden}
+.subnav::before,.subnav::after{content:"";position:absolute;top:0;bottom:0;width:3rem;pointer-events:none;z-index:2;opacity:0;transition:opacity .18s ease}
+.subnav::before{left:0;background:linear-gradient(to right,rgba(255,255,255,.98) 35%,rgba(255,255,255,0))}
+.subnav::after{content:"\203A";right:0;background:linear-gradient(to left,rgba(255,255,255,.98) 45%,rgba(255,255,255,0));display:flex;align-items:center;justify-content:flex-end;padding-right:.55rem;color:var(--accent-deep);font-size:1.35rem;line-height:1;font-family:var(--font-display)}
+.subnav[data-mehr-links]::before{opacity:1}
+.subnav[data-mehr-rechts]::after{opacity:1}
+.subnav ul{list-style:none;margin:0;padding:0;display:flex;gap:.25rem;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.subnav ul::-webkit-scrollbar{display:none}
 .subnav a{display:inline-block;white-space:nowrap;padding:.85rem .8rem;font-family:var(--font-display);font-weight:500;font-size:var(--step--1);color:var(--ink-2);text-decoration:none;border-bottom:2px solid transparent}
 .subnav a:hover,.subnav a.is-current{color:var(--accent-deep);border-bottom-color:var(--accent)}
 .prose{max-width:72ch}

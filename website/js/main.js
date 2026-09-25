@@ -100,14 +100,64 @@
     v.addEventListener('ended', () => box.removeAttribute('data-playing'));
   });
 
-  /* Unter-Navigation markiert den sichtbaren Abschnitt */
+  /* Unter-Navigation: markiert den sichtbaren Abschnitt, zeigt an, dass seitlich
+     mehr Punkte stehen, und schiebt den markierten Punkt selbst ins Bild.
+     Auf dem Handy passen nie alle Punkte nebeneinander - ohne Hinweis kommt
+     niemand auf die Idee, den Balken zur Seite zu schieben. */
   const subnav = d.querySelector('.subnav');
-  if (subnav && 'IntersectionObserver' in window) {
+  if (subnav) {
+    const liste = subnav.querySelector('ul');
     const links = Array.from(subnav.querySelectorAll('a[href^="#"]'));
-    const targets = links.map(a => d.querySelector(a.getAttribute('href'))).filter(Boolean);
-    const io2 = new IntersectionObserver(entries => {
-      entries.forEach(en => { if (en.isIntersecting) { links.forEach(l => l.classList.toggle('is-current', l.getAttribute('href') === '#' + en.target.id)); } });
-    }, { rootMargin: '-40% 0px -55% 0px' });
-    targets.forEach(t => io2.observe(t));
+
+    /* a) Verlauf und Pfeil ein- und ausblenden */
+    const raender = () => {
+      if (!liste) return;
+      const rest = liste.scrollWidth - liste.clientWidth;
+      liste.scrollLeft > 4 ? subnav.setAttribute('data-mehr-links', '') : subnav.removeAttribute('data-mehr-links');
+      liste.scrollLeft < rest - 4 ? subnav.setAttribute('data-mehr-rechts', '') : subnav.removeAttribute('data-mehr-rechts');
+    };
+    if (liste) {
+      raender();
+      liste.addEventListener('scroll', raender, { passive: true });
+      window.addEventListener('resize', raender, { passive: true });
+      if ('ResizeObserver' in window) new ResizeObserver(raender).observe(liste);
+      window.addEventListener('load', raender);
+    }
+
+    /* b) markierten Punkt waagerecht mittig schieben - ohne die Seite zu bewegen.
+       Wer den Balken gerade selbst angefasst hat, wird zwei Sekunden in Ruhe gelassen. */
+    let selbstGeschoben = 0;
+    if (liste) {
+      ['pointerdown', 'touchstart', 'wheel'].forEach(ev =>
+        liste.addEventListener(ev, () => { selbstGeschoben = Date.now(); }, { passive: true }));
+    }
+    const sanft = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const insBild = a => {
+      if (!liste || !a) return;
+      if (liste.scrollWidth <= liste.clientWidth + 4) return;
+      if (Date.now() - selbstGeschoben < 2000) return;
+      const rA = a.getBoundingClientRect(), rL = liste.getBoundingClientRect();
+      const abstand = (rA.left - rL.left) - (rL.width - rA.width) / 2;
+      if (Math.abs(abstand) < 8) return;
+      const ziel = Math.max(0, Math.min(liste.scrollLeft + abstand, liste.scrollWidth - liste.clientWidth));
+      liste.scrollTo({ left: ziel, behavior: sanft ? 'smooth' : 'auto' });
+    };
+
+    if ('IntersectionObserver' in window) {
+      const targets = links.map(a => d.querySelector(a.getAttribute('href'))).filter(Boolean);
+      const io2 = new IntersectionObserver(entries => {
+        entries.forEach(en => {
+          if (!en.isIntersecting) return;
+          let aktiv = null;
+          links.forEach(l => {
+            const treffer = l.getAttribute('href') === '#' + en.target.id;
+            l.classList.toggle('is-current', treffer);
+            if (treffer) aktiv = l;
+          });
+          insBild(aktiv);
+        });
+      }, { rootMargin: '-40% 0px -55% 0px' });
+      targets.forEach(t => io2.observe(t));
+    }
   }
 })();
