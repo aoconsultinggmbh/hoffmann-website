@@ -17,6 +17,7 @@ on:
     paths:
       - "website/**"
       - ".github/workflows/vorschau.yml"
+      - ".github/version-leiste.py"
   workflow_dispatch:
 
 permissions:
@@ -48,6 +49,8 @@ jobs:
           # robots.txt der Vorschau: alles sperren, keine Sitemap
           printf 'User-agent: *\nDisallow: /\n' > _vorschau/robots.txt
           rm -f _vorschau/sitemap.xml
+          # Leiste "Version 2 ansehen" (nur Vorschau, kommt nie auf die echte Seite)
+          python3 .github/version-leiste.py _vorschau "Version 1" "Version 2" https://hoffmann-v2.vorschau.ao-consult.de
           echo "Vorschau gebaut:"; ls _vorschau
 
       - name: Fuer Pages verpacken

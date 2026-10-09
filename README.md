@@ -45,6 +45,14 @@ Nichts geht ohne Freigabe live.
 
 ## Wichtig für die Vorschau
 
+- **Version 2 zum Vergleich** (Briefing 09.10.2026): <https://hoffmann-v2.vorschau.ao-consult.de>,
+  Projekt `hoffmann-v2-website`. Oben in der Vorschau steht eine Leiste „Version 2 ansehen“.
+  Sie wird nur beim Bauen der Vorschau eingefügt (`.github/version-leiste.py`) und kommt
+  **nie** auf die echte Seite.
+- **Achtung Admir:** Am 09.10.2026 direkt in `website/` geändert (Briefing B5): Auf der
+  Kosmetik-Seite wählt der Anruf-Knopf im Abschnitt „Ihr Termin im Kosmetik-Institut“
+  jetzt 0179 2040640 statt der Praxisnummer. Bitte auch in `01_site/pages/` nachziehen,
+  sonst ist der Fehler nach dem nächsten Bauen wieder da.
 - **Das Kontaktformular funktioniert in der Vorschau nicht.** `kontakt/senden.php`
   braucht PHP, das gibt es bei GitHub Pages nicht. Auf dem echten Server läuft es.
 - Die Videos (84 MB, größtes 27 MB) liegen mit im Projekt. Das ist in Ordnung,
